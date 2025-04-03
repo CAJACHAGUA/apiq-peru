@@ -13,6 +13,19 @@
     width: 100px;
 }
 
+/* Navbar */
+.nav-link {
+    color: black;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.nav-link.active {
+    color: red; /* Cambia el color cuando la sección está activa */
+    font-weight: bold;
+}
+
+
 /* Portada */
 .conteiner-portada {
     display: flex;
@@ -198,6 +211,12 @@
     width: 200px;
     height: 200px;
     box-shadow: 0px 10px 12px rgba(137, 137, 140, 0.25);
+    transition: all 0.3s ease-in-out;
+
+}
+.miembro:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
 }
 /*Eventos*/
 .conteiner-eventos {
@@ -222,9 +241,15 @@
     max-width: 400px; /* Se adapta mejor */
     width: 100%; /* Evita desbordamientos */
     height: 520px;
-
+    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
+    transition: all 0.3s ease-out;
+}
+
+ .evento:hover {
+    transform: scale(1.05);
+    
 }
 .evento img {
     border-radius: 10px 10px 0px 0px;
@@ -286,7 +311,11 @@ footer {
     padding: 20px;
 }
 
-@media (max-width: 808px) {
+@media (max-width: 908px) {
+    .quienes-somos p {
+        max-width: 90%;
+        font-size: 18px;
+    }
     .content-vision {
         padding: 40px 50px;
     }
@@ -317,12 +346,12 @@ footer {
 
     .portada p {
         font-size: 20px;
-        margin: 0px 0px;
+        margin-bottom: 20px;
     }
 
     .quienes-somos p {
         max-width: 100%;
-        font-size: 13px;
+        font-size: 16px;
     }
 
     .nosotros {
@@ -378,5 +407,10 @@ footer {
     /* Pantallas pequeñas */
     .empresa p {
         display: none;
+    }
+
+    .portada h1 {
+        
+        margin-top: 50px;
     }
 }
