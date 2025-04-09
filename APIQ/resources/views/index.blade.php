@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="icon" href="{{ asset('/img/logos/icon.png') }}">
     <link rel="stylesheet" href="{{ asset('/css/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/scroll.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -64,8 +65,10 @@
                 <h1>Promoviendo la Ciencia Química para un Futuro Mejor</h1>
                 <p>Somos una asociación sin fines de lucro dedicada a la divulgación, investigación y educación en el
                     campo de la química.</p>
-                <a href="https://wa.me/933186405?text=Hola%20quiero%20más%20información"><button type="button"
-                        class="btn btn-warning">Unete a Nosotros</button></a>
+                 <div class="d-flex justify-content-center">
+                    <a href="https://wa.me/933186405?text=Hola%20quiero%20más%20información" class="btn_unete">Unete a Nosostros</a>
+                 </div>   
+                
             </div>
         </section>
         <section class="conteiner-quienes-somos" id="Nosotros">
@@ -154,13 +157,14 @@
 
         </section>
         <section class="conteiner-eventos" id="Eventos">
-            <div class="content-titulo text-center">
+            <div class="w-75 mx-auto text-center">
                 <h1>Eventos</h1>
-                <h5 class="mx-auto ">
+                <h5>
                     Participa en nuestras actividades y mantente actualizado con los últimos avances en el campo de la
                     química.
                 </h5>
             </div>
+
             <div class="content-eventos">
                 <div class="evento">
                     <img src="{{ asset('/img/eventos/evento.jpg') }}" alt="" />
@@ -181,7 +185,7 @@
                             <i class='bx bx-calendar' style='color:#a09898; font-size:25px;'></i>
                             <p class="time mb-0 text-muted" style="font-size:15px;">2025-06-01</p>
                         </div>
-                        <h4>Seminario de Química Verde</h4>
+                        <h4>Biotecnología</h4>
                         <p>Conoce las últimas tendencias en química sostenible.</p>
                         <button type="button" class="btn btn-warning">Inscribirme</button>
                     </div>
@@ -193,7 +197,7 @@
                             <i class='bx bx-calendar' style='color:#a09898; font-size:25px;'></i>
                             <p class="time mb-0 text-muted" style="font-size:15px;">2025-06-01</p>
                         </div>
-                        <h4>Seminario de Química Verde</h4>
+                        <h4>Química Industrial</h4>
                         <p>Conoce las últimas tendencias en química sostenible.</p>
                         <button type="button" class="btn btn-warning">Inscribirme</button>
                     </div>
@@ -205,35 +209,36 @@
                             <i class='bx bx-calendar' style='color:#a09898; font-size:25px;'></i>
                             <p class="time mb-0 text-muted" style="font-size:15px;">2025-06-01</p>
                         </div>
-                        <h4>Seminario de Química Verde</h4>
+                        <h4>Gestión de la Calidad y Seguridad Industrial</h4>
                         <p>Conoce las últimas tendencias en química sostenible.</p>
                         <button type="button" class="btn btn-warning">Inscribirme</button>
                     </div>
                 </div>
-                <div class="evento">
-                    <img src="{{ asset('/img/eventos/evento.jpg') }}" alt="" />
-                    <div class="descripcion">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class='bx bx-calendar' style='color:#a09898; font-size:25px;'></i>
-                            <p class="time mb-0 text-muted" style="font-size:15px;">2025-06-01</p>
-                        </div>
-                        <h4>Seminario de Química Verde</h4>
-                        <p>Conoce las últimas tendencias en química sostenible.</p>
-                        <button type="button" class="btn btn-warning">Inscribirme</button>
-                    </div>
+                
+            </div>
+        </section>
+        <section class="conteiner-validacion" >
+
+            <div class="content-titulo ">
+                <i class='bx bx-shield-alt-2' style='color:#0055f2'></i>
+                <h1 style='color:#0055f2;  font-weight:800;'>Validación de Certificados</h1>
+                <h4 style='color:#4b5563'>Verifica la autenticidad de los certificados emitidos por Asociación Peruana de Ingenieros Químicos
+                    de manera rápida y segura.</h4>
+            </div>
+            <div class="content-validacion">
+                <h3 style='color:#0055f2; font-weight:600;'>Sistema de Verificación Digital</h3>
+                <p>Verifica la autenticidad de certificados de cursos, talleres, simposios y otras actividades
+                    organizadas por nuestra asociación.</p>
+                <div class="contenedor_boton">
+                    <a href="{{ route('validacion') }}" class="btn_validar">
+                        Validar Certificado <i class='bx bx-link-external'></i>
+                    </a>
+                    
                 </div>
-                <div class="evento">
-                    <img src="{{ asset('/img/eventos/evento.jpg') }}" alt="" />
-                    <div class="descripcion">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <i class='bx bx-calendar' style='color:#a09898; font-size:25px;'></i>
-                            <p class="time mb-0 text-muted" style="font-size:15px;">2025-06-01</p>
-                        </div>
-                        <h4>Seminario de Química Verde</h4>
-                        <p>Conoce las últimas tendencias en química sostenible.</p>
-                        <button type="button" class="btn btn-warning">Inscribirme</button>
-                    </div>
-                </div>
+
+                <div style="background: rgb(170, 166, 166); height:2px; margin:15px 0px;"></div>
+                <p class=" nota "><i class='bx bx-check-circle' style='color:#22c55e'></i>Sistema seguro y confiable
+                    para la validación de documentos oficiales</p>
             </div>
         </section>
     </main>
@@ -241,7 +246,7 @@
         <section class="conteiner-contactos" id="Contacto">
             <!-- place footer here -->
             <div class="content-contactos">
-                <h1>Contactanos</h1><br>
+                <h1>Contactanos</h1>
                 <p>Estamos aquí para responder tus preguntas y explorar posibles colaboraciones.</p>
                 <a href="" class="contacto">
                     <i class='bx bx-envelope'></i>
@@ -274,7 +279,7 @@
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
     </script>
 
-    <script src="{{ asset('img/js/index.js') }}"></script>
+    <script src="{{ asset('js/index.js') }}"></script>
 </body>
 
 </html>
