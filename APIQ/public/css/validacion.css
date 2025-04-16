@@ -70,7 +70,8 @@ main {
     margin: 20px;
     width: 70%;  
     overflow-x: auto;  
-    box-sizing: border-box;   
+    box-sizing: border-box;
+    height: 100%;   
 }
 
 .table {

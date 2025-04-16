@@ -53,22 +53,22 @@
     <main>
         
             <section class="container-validation">
-                <form class="form-search" method="POST">
+                {{-- <form class="form-search" method="POST" id="ValidacionForm" action="{{ route('estudiante.show') }}">
                     @csrf
                     <h1>Validación de Certificado</h1>
                     <p>Ingresa el ID del certificado para verificar su autenticidad</p>
     
                     <div class="formulario input-group-lg search  ">
-                        <input type="text" class="form-control" id="inputGroup-sizing-lg" name="" placeholder="Ingrese su DNI"
+                        <input type="text" class="form-control" id="inputGroup-sizing-lg" name="codigo" placeholder="Ingrese su Codigo o DNI"
                             required>
                         <button type="submit" class="verificar ">
                             <i class='bx bx-search-alt-2' style='color:#ffffff'></i>Verificar
                         </button>
                     </div>
     
-                </form>
+                </form> --}}
             </section>
-            <section class="container-table ">
+            <section class="container-table d-none " id ="validacionTable" >
                 <table class="table table-striped table-bordered text-center m-0">
                     <thead>
                         <tr>
@@ -81,140 +81,18 @@
                             <th>Certificado</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        
-                        <tr>
-                            <td>1</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan kevin</td>
-                            <td>Pérez cajachagua</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan</td>
-                            <td>Pérez</td>
-                            <td>Curso de PHP</td>
-                            <td>2023-01-01</td>
-                            <td>2023-01-30</td>
-                            <td><button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bx bx-show-alt' style='color:#ffffff'  ></i></button></td> {{-- @foreach ($data as $item)
-                                <tr>
-                                    <td>{{ $item->nombre }}</td>
-                                    <td>{{ $item->apellido }}</td>
-                                    <td>{{ $item->correo }}</td>
-                                    <td>{{ $item->telefono }}</td>
-                                    <td>{{ $item->fecha_nacimiento }}</td>
-                                    <td>{{ $item->tipo_membresia }}</td>
-                                </tr>
-                            @endforeach --}}
-                        </tr>
+                    <tbody class="body-estudiante">
+                   
                         
                     </tbody>
                 </table>
+               
     
             </section>
-
+            {{-- <form action="{{route('estudiante.post')}}" method="POST" id="formCertificado">
+                @csrf
+                <button class="submit">guardar</button>
+            </form> --}}
         <!-- Button trigger modal -->
 
   
@@ -235,9 +113,11 @@
   </div>
         
     </main>
-    <footer>
-        <!-- place footer here -->
-    </footer>
+    
+   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="{{ asset('js/validacion.js') }}"></script>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
