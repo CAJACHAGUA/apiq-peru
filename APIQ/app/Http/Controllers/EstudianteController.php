@@ -54,34 +54,35 @@ class EstudianteController extends Controller
      * Display the specified resource.
      */
     public function show(Request $request)
-{
-    $request->validate([
-        'codigo' => 'required',
-    ]);
-
-    $codigo = $request->input('codigo');
-
-    $content = estudiante::where('codigo', $codigo)->first();
-
-    if (!$content) {
-        // Retorna un 200, pero indicando que no fue exitoso
+    {
+        $request->validate([
+            'codigo' => 'required',
+        ]);
+    
+        $codigo = $request->input('codigo');
+        
+    
+        $estudiantes = estudiante::where('codigo', $codigo)
+                                 ->orWhere('dni', $codigo)
+                                 ->paginate(10); // PAGINACIÓN
+    
+        if ($estudiantes->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Estudiante no encontrado'
+            ]);
+        }
+    
         return response()->json([
-            'success' => false,
-            'message' => 'Estudiante no encontrado'
+            'success' => true,
+            'estudiantes' => $estudiantes->items(), // Solo los datos
+            'current_page' => $estudiantes->currentPage(),
+            'last_page' => $estudiantes->lastPage(),
+            'total' => $estudiantes->total(),
+            'message' => 'Validación exitosa',
         ]);
     }
-
-    return response()->json([
-        'success' => true,
-        'estudiante' => [
-            'codigo' => $content->codigo,
-            'nombre' => $content->nombres,
-            'apellido' => $content->apellidos,
-            
-        ],
-        'message' => 'Validación exitosa',
-    ]);
-}
+    
 
 
 

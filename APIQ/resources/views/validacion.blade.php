@@ -53,7 +53,7 @@
     <main>
         
             <section class="container-validation">
-                {{-- <form class="form-search" method="POST" id="ValidacionForm" action="{{ route('estudiante.show') }}">
+                <form class="form-search" method="POST" id="ValidacionForm" action="{{ route('estudiante.show') }}">
                     @csrf
                     <h1>Validación de Certificado</h1>
                     <p>Ingresa el ID del certificado para verificar su autenticidad</p>
@@ -66,7 +66,7 @@
                         </button>
                     </div>
     
-                </form> --}}
+                </form>
             </section>
             <section class="container-table d-none " id ="validacionTable" >
                 <table class="table table-striped table-bordered text-center m-0">
@@ -86,8 +86,11 @@
                         
                     </tbody>
                 </table>
-               
-    
+                <div id="paginacion" class="mt-4 d-flex justify-content-center">
+
+                </div>
+
+                
             </section>
             {{-- <form action="{{route('estudiante.post')}}" method="POST" id="formCertificado">
                 @csrf
