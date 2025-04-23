@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
 use App\Models\estudiante;
+use App\Models\Certificado;
+use App\Models\Participante;
 
 class EstudianteController extends Controller
 {
@@ -55,36 +57,59 @@ class EstudianteController extends Controller
      */
     public function show(Request $request)
     {
-        $request->validate([
-            'codigo' => 'required',
-        ]);
-    
-        $codigo = $request->input('codigo');
-        
-    
-        $estudiantes = estudiante::where('codigo', $codigo)
-                                 ->orWhere('dni', $codigo)
-                                 ->paginate(10); // PAGINACIÓN
-    
-        if ($estudiantes->isEmpty()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Estudiante no encontrado'
-            ]);
-        }
-    
+        $query = $request->input('codigo');
+
+    if (!$query) {
+        return response()->json(['success' => false, 'message' => 'Parámetro "codigo" requerido.'], 400);
+    }
+
+    // Validación: Si es un DNI, debe ser numérico y de 9 caracteres
+    if (is_numeric($query) && strlen($query) === 8) {
+        // Buscar por DNI con paginación
+        $certificados = Certificado::with(['participante', 'curso'])
+            ->whereHas('participante', fn($q) => $q->where('dni', $query))
+            ->paginate(10);
+    } else {
+        // Buscar por código de certificado con paginación
+        $certificados = Certificado::with(['participante', 'curso'])
+            ->where('codigo_certificado', $query)
+            ->paginate(10);
+    }
+
+    // Verificar si se encontraron resultados
+    if ($certificados->isEmpty()) {
         return response()->json([
-            'success' => true,
-            'estudiantes' => $estudiantes->items(), // Solo los datos
-            'current_page' => $estudiantes->currentPage(),
-            'last_page' => $estudiantes->lastPage(),
-            'total' => $estudiantes->total(),
-            'message' => 'Validación exitosa',
+            'success' => false,
+            'message' => 'No se encontraron certificados con el código proporcionado.'
         ]);
     }
-    
 
+   
 
+        // Transformar los datos
+        $data = $certificados->getCollection()->map(function ($cert) {
+            return [
+                'nombre' => $cert->participante->nombres,
+                'apellido' => $cert->participante->apellidos,
+                'dni' => $cert->participante->dni,
+                'curso' => $cert->curso->nombre,
+                'fecha_inicio' => $cert->curso->fecha_inicio,
+                'fecha_fin' => $cert->curso->fecha_fin,
+                'codigo_certificado' => $cert->codigo_certificado,
+                'archivo_certificado' => asset('storage/certificados/' . $cert->archivo_certificado),
+            ];
+        });
+
+        // Reemplazar la colección transformada
+        $certificados->setCollection($data);
+
+        return response()->json([
+            'success' => true,
+            'estudiantes' => $certificados->getCollection(), // Usar getCollection()
+            'current_page' => $certificados->currentPage(),
+            'last_page' => $certificados->lastPage(),
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.

@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function cargarEstudiantes(page = 1) {
         const formData = new FormData(document.getElementById("ValidacionForm"));
         formData.append('page', page); // Añadir la página a la petición
-    
+
         $.ajax({
             url: "/validacion",
             type: "POST",
@@ -14,18 +14,20 @@ document.addEventListener("DOMContentLoaded", function() {
             contentType: false,
             processData: false,
             success: function(response) {
+                const estudiantes = response.estudiantes;
+                const tbody = $("#validacionTable tbody");
+                tbody.empty();
                 if (response.success) {
-                    const estudiantes = response.estudiantes;
-                    const tbody = $("#validacionTable tbody");
-                    tbody.empty();
                     $("#validacionTable").removeClass("d-none");
                     estudiantes.forEach(est => {
                         const fila = `
                             <tr>
-                                <td>${est.codigo}</td>
+                                <td>${est.codigo_certificado}</td>
                                 <td>${est.nombre}</td>
                                 <td>${est.apellido}</td>
-                                <td>${est.nombre}</td>
+                                <td>${est.curso}</td>
+                                <td>${est.fecha_inicio}</td>
+                                <td>${est.fecha_fin}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                         <i class="bx bxs-show"></i>
@@ -34,9 +36,10 @@ document.addEventListener("DOMContentLoaded", function() {
                             </tr>`;
                         tbody.append(fila);
                     });
-    
                     generarPaginacion(response.current_page, response.last_page);
                 } else {
+                    const fila = `<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>`;
+                    tbody.append(fila);
                     warning("Aviso: " + response.message);
                 }
             },
@@ -46,14 +49,14 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-    
+
     function generarPaginacion(paginaActual, ultimaPagina) {
         const paginacion = $("#paginacion");
         paginacion.empty();
-    
+
         if (ultimaPagina > 1) {
             const ul = $('<ul class="pagination justify-content-center"></ul>');
-    
+
             // Botón anterior
             const prevDisabled = paginaActual === 1 ? "disabled" : "";
             const prevBtn = $(`
@@ -71,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
             ul.append(prevBtn);
-    
+
             // Botones numerados
             for (let i = 1; i <= ultimaPagina; i++) {
                 const active = i === paginaActual ? "active" : "";
@@ -87,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
                 ul.append(item);
             }
-    
+
             // Botón siguiente
             const nextDisabled = paginaActual === ultimaPagina ? "disabled" : "";
             const nextBtn = $(`
@@ -105,13 +108,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
             ul.append(nextBtn);
-    
-            // Insertar en el contenedor
+
             paginacion.append($('<nav aria-label="Page navigation example"></nav>').append(ul));
         }
     }
-    
-    
+
     $(document).ready(function () {
         $('#ValidacionForm').on("submit", function (event) {
             event.preventDefault();
@@ -119,5 +120,4 @@ document.addEventListener("DOMContentLoaded", function() {
             cargarEstudiantes(currentPage);
         });
     });
-    
 });
