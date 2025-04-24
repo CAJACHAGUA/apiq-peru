@@ -18,4 +18,5 @@ Route::view('/', 'index')->name('home');
 Route::view('/validacion', 'validacion')->name('validacion');
 Route::post('/validacion', [EstudianteController::class, 'show'])->name('estudiante.show');
 Route::view('/a', 'a')->name('a');
-// Route::post('/validacion', [EstudianteController::class, 'store'])->name('estudiante.post');
+
+ Route::get('/validacion/?id={id}', [EstudianteController::class, 'buscarPorCodigo']);

@@ -1,55 +1,67 @@
-import { success, warning, error } from "./alerts.js";
+document.addEventListener("DOMContentLoaded", function () {
+    // Función para obtener el código desde la URL (si se pasa en la URL)
+    function getParametroURL(nombre) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(nombre);
+    }
 
-document.addEventListener("DOMContentLoaded", function() {
-    let currentPage = 1;
-
-    function cargarEstudiantes(page = 1) {
+    // Función para cargar los estudiantes
+    function cargarEstudiantes(page = 1, codigo = "") {
         const formData = new FormData(document.getElementById("ValidacionForm"));
-        formData.append('page', page); // Añadir la página a la petición
+        formData.append("page", page);
+        
+        if (codigo) {
+            formData.append("codigo", codigo);  // Si se pasa un código, lo agregamos
+        }
 
         $.ajax({
-            url: "/validacion",
+            url: "/validacion/",
             type: "POST",
             data: formData,
             contentType: false,
             processData: false,
-            success: function(response) {
+            success: function (response) {
                 const estudiantes = response.estudiantes;
                 const tbody = $("#validacionTable tbody");
                 tbody.empty();
-                if (response.success) {
-                    $("#validacionTable").removeClass("d-none");
-                    estudiantes.forEach(est => {
+
+                // Verificar si se obtuvieron resultados
+                if (response.success && estudiantes.length > 0) {
+                    $("#validacionTable").removeClass("d-none");  // Mostrar tabla
+                    $("#paginacion").removeClass("d-none");       // Mostrar paginación
+                    estudiantes.forEach((est) => {
                         const fila = `
-                            <tr>
-                                <td>${est.codigo_certificado}</td>
-                                <td>${est.nombre}</td>
-                                <td>${est.apellido}</td>
-                                <td>${est.curso}</td>
-                                <td>${est.fecha_inicio}</td>
-                                <td>${est.fecha_fin}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <i class="bx bxs-show"></i>
-                                    </button>
-                                </td>
-                            </tr>`;
+                          <tr>
+                            <td>${est.codigo_certificado}</td>
+                            <td>${est.nombre}</td>
+                            <td>${est.apellido}</td>
+                            <td>${est.curso}</td>
+                            <td>${est.fecha_inicio}</td>
+                            <td>${est.fecha_fin}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-pdf-id="${est.codigo_certificado}">
+                                    <i class="bx bxs-show"></i>
+                                </button>
+                            </td>
+                          </tr>`;
                         tbody.append(fila);
                     });
+
                     generarPaginacion(response.current_page, response.last_page);
                 } else {
+                    $("#paginacion").addClass("d-none");
                     const fila = `<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>`;
                     tbody.append(fila);
-                    warning("Aviso: " + response.message);
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 console.error("Error:", xhr.responseText);
-                error("Error en la carga.");
-            }
+                alert("Error en la carga.");
+            },
         });
     }
 
+    // Mostrar paginación
     function generarPaginacion(paginaActual, ultimaPagina) {
         const paginacion = $("#paginacion");
         paginacion.empty();
@@ -57,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (ultimaPagina > 1) {
             const ul = $('<ul class="pagination justify-content-center"></ul>');
 
-            // Botón anterior
+            // Paginación: Prev
             const prevDisabled = paginaActual === 1 ? "disabled" : "";
             const prevBtn = $(`
                 <li class="page-item ${prevDisabled}">
@@ -69,13 +81,12 @@ document.addEventListener("DOMContentLoaded", function() {
             prevBtn.click(function (e) {
                 e.preventDefault();
                 if (paginaActual > 1) {
-                    currentPage = paginaActual - 1;
-                    cargarEstudiantes(currentPage);
+                    cargarEstudiantes(paginaActual - 1);
                 }
             });
             ul.append(prevBtn);
 
-            // Botones numerados
+            // Páginas numéricas
             for (let i = 1; i <= ultimaPagina; i++) {
                 const active = i === paginaActual ? "active" : "";
                 const item = $(`
@@ -85,13 +96,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 `);
                 item.click(function (e) {
                     e.preventDefault();
-                    currentPage = i;
-                    cargarEstudiantes(currentPage);
+                    cargarEstudiantes(i);
                 });
                 ul.append(item);
             }
 
-            // Botón siguiente
+            // Paginación: Next
             const nextDisabled = paginaActual === ultimaPagina ? "disabled" : "";
             const nextBtn = $(`
                 <li class="page-item ${nextDisabled}">
@@ -103,8 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
             nextBtn.click(function (e) {
                 e.preventDefault();
                 if (paginaActual < ultimaPagina) {
-                    currentPage = paginaActual + 1;
-                    cargarEstudiantes(currentPage);
+                    cargarEstudiantes(paginaActual + 1);
                 }
             });
             ul.append(nextBtn);
@@ -113,11 +122,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    $(document).ready(function () {
-        $('#ValidacionForm').on("submit", function (event) {
-            event.preventDefault();
-            currentPage = 1;
-            cargarEstudiantes(currentPage);
-        });
+    // Detectar parámetro "id" en la URL (si es que se pasa en la URL)
+    const idDesdeURL = getParametroURL("id");
+    if (idDesdeURL) {
+        cargarEstudiantes(1, idDesdeURL); // Llamar con el código directamente desde la URL
+    } else {
+        
+    }
+
+    // Submit del formulario
+    $("#ValidacionForm").on("submit", function (event) {
+        event.preventDefault();
+        cargarEstudiantes();
     });
 });

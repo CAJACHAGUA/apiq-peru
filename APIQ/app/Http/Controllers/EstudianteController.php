@@ -57,36 +57,35 @@ class EstudianteController extends Controller
      */
     public function show(Request $request)
     {
-        $query = $request->input('codigo');
-
-    if (!$query) {
-        return response()->json(['success' => false, 'message' => 'Parámetro "codigo" requerido.'], 400);
-    }
-
-    // Validación: Si es un DNI, debe ser numérico y de 9 caracteres
-    if (is_numeric($query) && strlen($query) === 8) {
-        // Buscar por DNI con paginación
-        $certificados = Certificado::with(['participante', 'curso'])
-            ->whereHas('participante', fn($q) => $q->where('dni', $query))
-            ->paginate(10);
-    } else {
-        // Buscar por código de certificado con paginación
-        $certificados = Certificado::with(['participante', 'curso'])
-            ->where('codigo_certificado', $query)
-            ->paginate(10);
-    }
-
-    // Verificar si se encontraron resultados
-    if ($certificados->isEmpty()) {
-        return response()->json([
-            'success' => false,
-            'message' => 'No se encontraron certificados con el código proporcionado.'
+        $codigo = $request->input('codigo') ?? $request->query('id'); // Acepta POST y GET
+    
+        if (!$codigo) {
+            return response()->json(['success' => false, 'message' => 'Parámetro "codigo" requerido.'], 400);
+        }
+    
+        $request->merge(['codigo' => $codigo]); // Para validar normalmente
+    
+        $request->validate([
+            'codigo' => 'required|string|max:255',
         ]);
-    }
-
-   
-
-        // Transformar los datos
+    
+        if (is_numeric($codigo) && strlen($codigo) === 8) {
+            $certificados = Certificado::with(['participante', 'curso'])
+                ->whereHas('participante', fn($q) => $q->where('dni', $codigo))
+                ->paginate(10);
+        } else {
+            $certificados = Certificado::with(['participante', 'curso'])
+                ->where('codigo_certificado', $codigo)
+                ->paginate(10);
+        }
+    
+        if ($certificados->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontraron certificados con el código proporcionado.'
+            ]);
+        }
+    
         $data = $certificados->getCollection()->map(function ($cert) {
             return [
                 'nombre' => $cert->participante->nombres,
@@ -95,22 +94,63 @@ class EstudianteController extends Controller
                 'curso' => $cert->curso->nombre,
                 'fecha_inicio' => $cert->curso->fecha_inicio,
                 'fecha_fin' => $cert->curso->fecha_fin,
-                'codigo_certificado' => $cert->codigo_certificado,
-                'archivo_certificado' => asset('storage/certificados/' . $cert->archivo_certificado),
+                'codigo_certificado' => $cert->codigo_certificado
             ];
         });
-
-        // Reemplazar la colección transformada
+    
         $certificados->setCollection($data);
-
+    
         return response()->json([
             'success' => true,
-            'estudiantes' => $certificados->getCollection(), // Usar getCollection()
+            'estudiantes' => $certificados->getCollection(),
             'current_page' => $certificados->currentPage(),
             'last_page' => $certificados->lastPage(),
         ]);
     }
+    public function buscarPorCodigo($codigo)
+    {
+        if (is_numeric($codigo) && strlen($codigo) === 8) {
+            $certificados = Certificado::with(['participante', 'curso'])
+                ->whereHas('participante', fn($q) => $q->where('dni', $codigo))
+                ->paginate(10);
+        } else {
+            $certificados = Certificado::with(['participante', 'curso'])
+                ->where('codigo_certificado', $codigo)
+                ->paginate(10);
+        }
+    
+        if ($certificados->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontraron certificados con el código proporcionado.'
+            ]);
+        }
+    
+        $data = $certificados->getCollection()->map(function ($cert) {
+            return [
+                'nombre' => $cert->participante->nombres,
+                'apellido' => $cert->participante->apellidos,
+                'dni' => $cert->participante->dni,
+                'curso' => $cert->curso->nombre,
+                'fecha_inicio' => $cert->curso->fecha_inicio,
+                'fecha_fin' => $cert->curso->fecha_fin,
+                'codigo_certificado' => $cert->codigo_certificado
+            ];
+        });
+    
+        $certificados->setCollection($data);
+    
+        return response()->json([
+            'success' => true,
+            'estudiantes' => $certificados->getCollection(),
+            'current_page' => $certificados->currentPage(),
+            'last_page' => $certificados->lastPage(),
+        ]);
+    }
+            
+    
 
+    
     /**
      * Show the form for editing the specified resource.
      */

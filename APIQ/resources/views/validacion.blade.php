@@ -13,14 +13,14 @@
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
-</head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
+</head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg bg-light fixed-top">
@@ -31,14 +31,12 @@
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <!-- Logo y Nombre Centrados -->
                 <a class="navbar-brand d-flex  align-items-center text-center mx-auto empresa " style="font-size: 14px;"
                     href="#">
                     <img src="{{ asset('/img/logos/logo.svg') }}" alt="logo" class="logo">
                     <p class="m-0 ">Asociación Peruana de <br> Ingenieros Químicos</p>
                 </a>
-
                 <!-- Menú de Navegación -->
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-end">
@@ -51,24 +49,22 @@
         </nav>
     </header>
     <main>
-        
-            <section class="container-validation">
-                <form class="form-search" method="POST" id="ValidacionForm" action="{{ route('estudiante.show') }}">
-                    @csrf
-                    <h1>Validación de Certificado</h1>
-                    <p>Ingresa el ID del certificado para verificar su autenticidad</p>
-    
-                    <div class="formulario input-group-lg search  ">
-                        <input type="text" class="form-control" id="inputGroup-sizing-lg" name="codigo" placeholder="Ingrese su Codigo o DNI"
-                            required>
-                        <button type="submit" class="verificar ">
-                            <i class='bx bx-search-alt-2' style='color:#ffffff'></i>Verificar
-                        </button>
-                    </div>
-    
-                </form>
-            </section>
-            <section class="container-table d-none " id ="validacionTable" >
+        <section class="container-validation">
+            <form class="form-search" method="POST" id="ValidacionForm" action="{{ route('estudiante.show') }}">
+                @csrf
+                <h1>Validación de Certificado</h1>
+                <p>Ingresa el ID del certificado para verificar su autenticidad</p>
+                <div class="formulario input-group-lg search  ">
+                    <input type="text" class="form-control" id="inputGroup-sizing-lg" name="codigo"
+                        placeholder="Ingrese su Codigo o DNI" required>
+                    <button type="submit" class="verificar ">
+                        <i class='bx bx-search-alt-2' style='color:#ffffff'></i>Verificar
+                    </button>
+                </div>
+            </form>
+        </section>
+        <section class="container-table d-none " id="validacionTable">
+            <div class="content-table">
                 <table class="table table-striped table-bordered text-center m-0">
                     <thead>
                         <tr>
@@ -83,55 +79,44 @@
                     </thead>
                     <tbody class="body-estudiante">
                         <tr>
-                            <td>NO SE ENCONTRARON DATOS</td>
+                            <td colspan="7" class="text-center">No se encontraron resultados</td>
                         </tr>
-                   
-                        
                     </tbody>
                 </table>
-                <div id="paginacion" class="mt-4 d-flex justify-content-center">
-
-                </div>
-
+            </div>
+            
+            <div id="paginacion" class="mt-4 d-flex justify-content-center"> </div>
+        </section>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> <!-- Aquí cambiamos a modal-xl -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfFrame" src="" width="100%" height="500px" style="border: none;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 
-            </section>
-           
-  
-
-
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-        
+
     </main>
-    
-   
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="{{ asset('js/validacion.js') }}"></script>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
-    </script>
-
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
-    </script>
+        </script>
 </body>
-
 </html>

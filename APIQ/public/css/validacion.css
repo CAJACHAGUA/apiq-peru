@@ -70,19 +70,20 @@ main {
 .container-table {
     margin: 20px;
     width: 70%;  
-    overflow-x: auto;  
+    
     box-sizing: border-box;
     height: 100%;   
 }
 
-.table {
+table {
+    overflow: auto;
     width: 100%; 
     table-layout: auto;  
     margin-top: 15px;
    
 }
 
-.table th, .table td {
+table th, table td {
     text-align: center;  
     vertical-align: middle;  /* Centrado vertical en las celdas */
 }
@@ -92,6 +93,8 @@ main {
         width: 85%;
         overflow: auto;
     }
+    .content-table {
+        overflow: auto;}
 
     .formulario {
         display: flex;
