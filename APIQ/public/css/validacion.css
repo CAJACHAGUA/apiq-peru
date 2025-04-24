@@ -5,110 +5,126 @@
     font-family: "Quicksand", sans-serif;
    
 }
-
-main {
-    display: grid;
-    grid-template-columns: 1fr;
-    place-items: center;
-
-    width: 100%;
-    min-height: 100vh;
-
-    padding: 20px 0;
-
-    background-image: url("../img/fondo-pop.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-blend-mode: overlay;
-    background-attachment: fixed;
-
-    position: relative;
-}
-
 .logo {
     height: 50px;
-    width: 100px;
+    width: 80px;
+    margin-right: 10px;
 }
 
-.container-validation {
-    margin: 50px;
+nav {
+    background: #07294d;
+    color: #ffffff;
+    border-bottom: #ffc600 1px solid;
+}
+
+main {
     display: flex;
-    justify-content: center;
-    background: white;
-    border-radius: 10px;
-    border: solid 1px #ffffff;
-    box-shadow: 0px 10px 5px rgba(128, 128, 136, 0.25);
-    width: 66%;
-    padding: 20px;
-}
+    flex-direction: column;
+    align-items: center;      /* Centrado horizontal */
+    justify-content: center;  /* Centrado vertical si quieres */
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
 
-.form-search {
+  section {
     width: 100%;
-}
+    max-width: 766px;          /* Límite en pantallas grandes */
+    margin: 1rem 0;
+    /* padding: 1.5rem; */
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(161, 160, 160, 0.1);
+    border: 1px solid #cdd4db;
+    overflow: hidden;
+  }
 
-.formulario {
-    display: flex;
+  .container-validation{
+    background: linear-gradient(to bottom, #07294d 50%, transparent 50%);
+    padding: 1.5rem; 
 }
+.title{
+    text-align: center;
+    margin-top: 50px;
+    color: #07294d;
 
-.search {
-    gap: 20px;
 }
-
-.verificar {
+.title h1{
+    font-size: 2.5rem;
+    font-weight: 700;
+} 
+.title p{
+    
+    font-weight: 700;
+    color: #4b73ae;
+}    
+  .content-title{
+    color: #ffffff;
+    padding-bottom: 29px;
+  }
+  .verificar {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: black;
-    color: white;
+    background: #ffc600;
+    color: #07294d;
     font-weight: 500;
-    border-radius: 5px;
+    border-radius: 8px;
     letter-spacing: 2px;
-    padding: 5px 10px;
+    padding: 5px 15px;
+    border: #ffc600 1px solid;
 }
-
-.container-table {
-    margin: 20px;
-    width: 70%;  
-    
-    box-sizing: border-box;
-    height: 100%;   
-}
-
-table {
-    overflow: auto;
-    width: 100%; 
-    table-layout: auto;  
-    margin-top: 15px;
-   
-}
-
-table th, table td {
-    text-align: center;  
-    vertical-align: middle;  /* Centrado vertical en las celdas */
-}
-
-@media (max-width: 768px) {
-    .container-table {
-        width: 85%;
-        overflow: auto;
+    .verificar:hover {
+        background: #07294d;
+        color: #ffc600;
+        transition: 0.3s;
     }
-    .content-table {
-        overflow: auto;}
+    .verificar i {
+        text-decoration: none;
+        color: #07294d;
+    }
+    .verificar:hover i {
+        color: #ffc600;
+        transition: 0.3s;
+    }
+    th{
+        height: 56px;
+    }
+.content-title-valiacion{
+    padding: 1.5rem; 
+    background: #07294d;
+    color: #ffffff;
+}
+  .container-instruciones{
+    padding: 1.5rem; 
+  background: #07294d;
+  color: #ffffff;
+}
 
+main p {
+    font-weight: 500;
+    color: #cdd4db;
+}
+
+footer{
+    margin-top: 30px;
+    background: #07294d;
+    border-top: #ffc600 1px solid;
+}
+.derechos{
+    color: #ffffff;
+    text-align: center;
+    padding: 1rem;
+}
+  @media (max-width: 480px) {
     .formulario {
         display: flex;
         flex-direction: column;
     }
-
-    .verificar {
-        text-align: center;
-    }
-
-    
-}
-
-@media (max-width: 375px) {
+   
+  }
+  @media (max-width: 375px) {
     .empresa p {
         display: none;
     }

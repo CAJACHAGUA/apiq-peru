@@ -1,3 +1,4 @@
+import  { success, warning, error } from "./alerts.js";
 document.addEventListener("DOMContentLoaded", function () {
     // Función para obtener el código desde la URL (si se pasa en la URL)
     function getParametroURL(nombre) {
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (codigo) {
             formData.append("codigo", codigo);  // Si se pasa un código, lo agregamos
         }
-
+        
         $.ajax({
             url: "/validacion/",
             type: "POST",
@@ -21,42 +22,51 @@ document.addEventListener("DOMContentLoaded", function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                console.log(response);
                 const estudiantes = response.estudiantes;
                 const tbody = $("#validacionTable tbody");
+                
                 tbody.empty();
-
-                // Verificar si se obtuvieron resultados
+              
                 if (response.success && estudiantes.length > 0) {
-                    $("#validacionTable").removeClass("d-none");  // Mostrar tabla
-                    $("#paginacion").removeClass("d-none");       // Mostrar paginación
+                    var n_certicados=estudiantes.length ;
+                    $("#N_certificados").text(n_certicados + " certificado(s) encontrado(s)");
+                    let nombre = estudiantes[0].nombre + " " + estudiantes[0].apellido;
+                    let dni = estudiantes[0].dni ;
+                    $("#nombre").text("Nombre: " + nombre);
+                    $("#dni").text("DNI: "+ dni);
+                    $("#validacionTable").removeClass("d-none");  
+                    $("#paginacion").removeClass("d-none");       
                     estudiantes.forEach((est) => {
                         const fila = `
                           <tr>
                             <td>${est.codigo_certificado}</td>
-                            <td>${est.nombre}</td>
-                            <td>${est.apellido}</td>
                             <td>${est.curso}</td>
-                            <td>${est.fecha_inicio}</td>
-                            <td>${est.fecha_fin}</td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-pdf-id="${est.codigo_certificado}">
-                                    <i class="bx bxs-show"></i>
-                                </button>
+                            <td>${est.fecha_emision}</td>
+                            <td class="text-center">
+                                <a class="btn btn-sm btn-outline-warning fw-bold d-inline-flex align-items-center justify-content-center" href="${est.ruta_certificado}" target="_blank" download style="width: 80px; color: #07294d; gap: 5px;">
+                                    <i class="bx bxs-show me-1" style="font-size:20px;"></i> Ver</a>
+                               
                             </td>
+
                           </tr>`;
                         tbody.append(fila);
                     });
 
                     generarPaginacion(response.current_page, response.last_page);
                 } else {
+                    $("#N_certificados").text( "0 certificado(s) encontrado(s)");
+                    $("#nombre").text("Nombre: ---------- " );
+                    $("#dni").text("DNI:------- ");
                     $("#paginacion").addClass("d-none");
                     const fila = `<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>`;
                     tbody.append(fila);
+                    warning("Aviso: " + response.message);
                 }
             },
             error: function (xhr) {
                 console.error("Error:", xhr.responseText);
-                alert("Error en la carga.");
+                error("Error en la carga.");
             },
         });
     }
