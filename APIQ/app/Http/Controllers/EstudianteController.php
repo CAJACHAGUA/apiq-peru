@@ -2,57 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
-use App\Models\estudiante;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Certificado;
-use App\Models\Participante;
 
 class EstudianteController extends Controller
 {
-    public function index() {
-    }
-
-    public function create() {
-    }
-
-    public function store(Request $request)
-    {
-    }
-
     public function show(Request $request)
     {
         $codigo = $request->input('codigo') ?? $request->query('id');
-         
 
         if (!$codigo) {
             return response()->json(['success' => false, 'message' => 'Parámetro "codigo" requerido.'], 400);
         }
 
-        $request->merge(['codigo' => $codigo]);
-        $request->validate([
-            'codigo' => 'required|string',
-        ]);
-       
-        return $this->buscarCertificados($codigo);
-    }
-
-    public function buscarPorCodigo($codigo)
-    {
         return $this->buscarCertificados($codigo);
     }
 
     private function buscarCertificados($codigo)
     {
+        // Buscar por DNI (numérico de 8 dígitos) o por código del certificado
+        $query = Certificado::with(['participante', 'curso']);
+
         if (is_numeric($codigo) && strlen($codigo) === 8) {
-            $certificados = Certificado::with(['participante', 'curso'])
-                ->whereHas('participante', fn($q) => $q->where('dni', $codigo))
-                ->paginate(10);
+            $query->whereHas('participante', fn($q) => $q->where('dni', $codigo));
         } else {
-            $certificados = Certificado::with(['participante', 'curso'])
-                ->where('codigo_certificado', $codigo)
-                ->paginate(10);
+            $query->where('codigo_certificado', $codigo);
         }
+
+        $certificados = $query->paginate(10);
 
         if ($certificados->isEmpty()) {
             return response()->json([
@@ -68,8 +46,8 @@ class EstudianteController extends Controller
                 'dni' => $cert->participante->dni,
                 'curso' => $cert->curso->nombre,
                 'fecha_emision' => $cert->fecha_emision,
-                'codigo_certificado' => $cert->codigo_certificado,
-                'ruta_certificado' => $cert->archivo_certificado
+                'codigo_certificado' => $cert->codigo_certificado
+                
             ];
         });
 
@@ -83,12 +61,25 @@ class EstudianteController extends Controller
         ]);
     }
 
-    public function edit(string $id) {
-    }
+    public function showPDF(Request $request)
+    {
+        $id = $request->query('id');
 
-    public function update(Request $request, string $id) {
-    }
+        if (!$id) {
+            return response()->json(['error' => 'ID no proporcionado'], 400);
+        }
 
-    public function destroy(string $id) {
+        try {
+            $certificado = Certificado::where("codigo_certificado", $id)->first();
+
+            if ($certificado && $certificado->archivo_certificado) {
+                $pdfContent = base64_encode($certificado->archivo_certificado);
+                return response()->json(['pdf' => $pdfContent]);
+            } else {
+                return response()->json(['error' => 'Archivo no encontrado'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

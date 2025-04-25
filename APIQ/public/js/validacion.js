@@ -1,4 +1,5 @@
-import  { success, warning, error } from "./alerts.js";
+import { success, warning, error } from "./alerts.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     // Función para obtener el código desde la URL (si se pasa en la URL)
     function getParametroURL(nombre) {
@@ -16,20 +17,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         
         $.ajax({
-            url: "/validacion/",
+            url: "/validacion",  // Ruta para búsqueda de estudiantes
             type: "POST",
             data: formData,
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log(response);
                 const estudiantes = response.estudiantes;
                 const tbody = $("#validacionTable tbody");
                 
                 tbody.empty();
               
                 if (response.success && estudiantes.length > 0) {
-                    var n_certicados=estudiantes.length ;
+                    let n_certicados = estudiantes.length;
                     $("#N_certificados").text(n_certicados + " certificado(s) encontrado(s)");
                     let nombre = estudiantes[0].nombre + " " + estudiantes[0].apellido;
                     let dni = estudiantes[0].dni ;
@@ -39,17 +39,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     $("#paginacion").removeClass("d-none");       
                     estudiantes.forEach((est) => {
                         const fila = `
-                          <tr>
-                            <td>${est.codigo_certificado}</td>
-                            <td>${est.curso}</td>
-                            <td>${est.fecha_emision}</td>
-                            <td class="text-center">
-                                <a class="btn btn-sm btn-outline-warning fw-bold d-inline-flex align-items-center justify-content-center" href="${est.ruta_certificado}" target="_blank" download style="width: 80px; color: #07294d; gap: 5px;">
-                                    <i class="bx bxs-show me-1" style="font-size:20px;"></i> Ver</a>
-                               
-                            </td>
-
-                          </tr>`;
+                        <tr>
+                          <td>${est.codigo_certificado}</td>
+                          <td>${est.curso}</td>
+                          <td>${est.fecha_emision}</td>
+                          <td class="text-center">
+                            <form action="" method="POST">
+                              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                              <button type="button" 
+                                      class="btn btn-sm btn-outline-warning fw-bold d-inline-flex align-items-center justify-content-center" 
+                                      data-bs-toggle="modal" 
+                                      data-bs-target="#exampleModal2" 
+                                      style="width: 80px; color: #07294d; gap: 5px;" 
+                                      data-pdf-id="${est.codigo_certificado}">
+                                <i class="bx bxs-show me-1" style="font-size:20px;"></i> Ver
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
+                        `;
                         tbody.append(fila);
                     });
 
@@ -81,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Paginación: Prev
             const prevDisabled = paginaActual === 1 ? "disabled" : "";
-            const prevBtn = $(`
+            const prevBtn = $(`  
                 <li class="page-item ${prevDisabled}">
                     <a class="page-link" href="#" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
@@ -99,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Páginas numéricas
             for (let i = 1; i <= ultimaPagina; i++) {
                 const active = i === paginaActual ? "active" : "";
-                const item = $(`
+                const item = $(`  
                     <li class="page-item ${active}">
                         <a class="page-link" href="#">${i}</a>
                     </li>
@@ -113,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Paginación: Next
             const nextDisabled = paginaActual === ultimaPagina ? "disabled" : "";
-            const nextBtn = $(`
+            const nextBtn = $(`  
                 <li class="page-item ${nextDisabled}">
                     <a class="page-link" href="#" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
@@ -145,4 +153,31 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         cargarEstudiantes();
     });
+
+    // Evento para ver PDF
+    $(document).on("click", "[data-pdf-id]", function () {
+        var pdfId = $(this).data("pdf-id");
+    
+        $.ajax({
+            url: "/validacion/pdf?id=" + encodeURIComponent(pdfId),  // URL para obtener el PDF
+            type: "GET",
+            dataType: "json", // Asegúrate de que tu backend devuelve JSON
+            success: function (response) {
+                if (response.pdf) {
+                    var pdfUrl = "data:application/pdf;base64," + response.pdf;
+                    $("#pdfFrame").attr("src", pdfUrl); // si estás usando jQuery
+                } else {
+                    mostrarAlerta("No se encontró el contenido del PDF.", "warning");
+                }
+            },
+            error: function (xhr, status, error) {
+                mostrarAlerta("Error al cargar el PDF: " + error, "error");
+            }
+        });
+    });
+
+    // Función para mostrar alertas
+    function mostrarAlerta(mensaje, tipo) {
+        alert(tipo.toUpperCase() + ": " + mensaje);
+    }
 });

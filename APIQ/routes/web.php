@@ -14,9 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::view('/', 'index')->name('home');
 Route::view('/validacion', 'validacion')->name('validacion');
-Route::post('/validacion', [EstudianteController::class, 'show'])->name('estudiante.show');
-Route::view('/a', 'a')->name('a');
 
- Route::get('/validacion/?id={id}', [EstudianteController::class, 'buscarPorCodigo']);
+// Para búsqueda POST de certificados (formulario)
+Route::post('/validacion', [EstudianteController::class, 'show'])->name('estudiante.show');
+
+// Para obtener PDF (recomendado usar esta URL en el botón "Ver PDF")
+Route::get('/validacion/pdf', [EstudianteController::class, 'showPDF'])->name('estudiante.pdf');

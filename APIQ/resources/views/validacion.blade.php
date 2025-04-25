@@ -19,9 +19,7 @@
         href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
 </head>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-lg  ">
@@ -82,7 +80,6 @@
                 <div class="d-flex gap-3 mt-3">
                     <p id="nombre">Nombre y apellidos:</p>
                     <p id="dni">DNI:</p>
-
                 </div>
             </div>
             <div class="content-table table-responsive">
@@ -115,17 +112,31 @@
                     <li>Haga clic en el botón "Verificar"</li>
                     <li>El sistema mostrará los detalles del certificado en la tabla de resultados</li>
                     <li>Puede ver los detalles completos o descargar su certificado usando los botones de acción</li>
-
                 </ol>
             </div>
+             <!-- Modal PDF-->
+             <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+             <div class="modal-dialog" style="max-width: 900px;">
+                 <div class="modal-content">
+                     <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLabel">Documento Sustentatorio</h5>
+                         <button type="button" class="btn-close" data-bs-dismiss="modal"
+                             aria-label="Close"></button>
+                     </div>
+                     <div class="modal-body">
+                         <iframe id="pdfFrame" src="" width="100%" height="500px"
+                             style="border: none;"></iframe>
 
-
+                     </div>
+                 </div>
+             </div>
+         </div>
     </main>
     <footer>
         <div class="derechos">
             <strong>© 2025 APIQ. Todos los derechos reservados.</strong>
         </div>
-
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
